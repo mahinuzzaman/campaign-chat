@@ -1,6 +1,8 @@
-import React from 'react';
 import { User, Bot, Loader2, Clock } from 'lucide-react';
+import React from 'react';
+
 import { MessageBubbleProps } from '../types';
+
 import CampaignDisplay from './CampaignDisplay';
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
@@ -20,26 +22,20 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
         {/* Avatar */}
         <div
           className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-            isUser
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 text-gray-600'
+            isUser ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
           }`}
         >
-          {isUser ? (
-            <User className="w-4 h-4" />
-          ) : (
-            <Bot className="w-4 h-4" />
-          )}
+          {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
         </div>
 
         {/* Message Content */}
-        <div className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
+        <div
+          className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
+        >
           {/* Message Bubble */}
           <div
             className={`relative px-4 py-3 rounded-lg shadow-sm ${
-              isUser
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-800'
+              isUser ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'
             } ${message.isLoading ? 'animate-pulse' : ''}`}
           >
             {/* Loading indicator */}
@@ -58,9 +54,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
             {/* Message tail */}
             <div
               className={`absolute top-3 w-3 h-3 transform rotate-45 ${
-                isUser
-                  ? 'right-[-6px] bg-blue-600'
-                  : 'left-[-6px] bg-gray-100'
+                isUser ? 'right-[-6px] bg-blue-600' : 'left-[-6px] bg-gray-100'
               }`}
             />
           </div>
@@ -78,7 +72,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
           {/* Campaign Display */}
           {message.campaigns && message.campaigns.length > 0 && (
             <div className="mt-4 w-full">
-              {message.campaigns.map((campaign) => (
+              {message.campaigns.map(campaign => (
                 <CampaignDisplay key={campaign.id} campaign={campaign} />
               ))}
             </div>

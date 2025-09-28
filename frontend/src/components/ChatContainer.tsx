@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot } from 'lucide-react';
-import { Message, ChatContainerProps } from '../types';
+import React, { useState, useRef, useEffect } from 'react';
+
 import ApiService from '../services/api';
+import { Message, ChatContainerProps } from '../types';
+
 import MessageBubble from './MessageBubble';
 
 const ChatContainer: React.FC<ChatContainerProps> = ({ connectedSources }) => {
@@ -21,7 +23,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ connectedSources }) => {
       const welcomeMessage: Message = {
         id: 'welcome',
         type: 'system',
-        content: 'Hello! I\'m your campaign assistant. Connect your data sources and tell me what kind of campaign you\'d like to create.',
+        content:
+          "Hello! I'm your campaign assistant. Connect your data sources and tell me what kind of campaign you'd like to create.",
         timestamp: new Date().toISOString(),
       };
       setMessages([welcomeMessage]);
@@ -46,7 +49,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ connectedSources }) => {
     const loadingMessage: Message = {
       id: (Date.now() + 1).toString(),
       type: 'system',
-      content: 'Analyzing your request and generating campaign recommendations...',
+      content:
+        'Analyzing your request and generating campaign recommendations...',
       timestamp: new Date().toISOString(),
       isLoading: true,
     };
@@ -82,7 +86,8 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ connectedSources }) => {
         const errorMessage: Message = {
           id: (Date.now() + 2).toString(),
           type: 'system',
-          content: 'Sorry, I encountered an error while processing your request. Please make sure the backend is running and try again.',
+          content:
+            'Sorry, I encountered an error while processing your request. Please make sure the backend is running and try again.',
           timestamp: new Date().toISOString(),
         };
         return [...filteredMessages, errorMessage];
@@ -105,16 +110,19 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ connectedSources }) => {
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center space-x-2">
           <Bot className="w-6 h-6 text-blue-600" />
-          <h1 className="text-lg font-semibold text-gray-800">Campaign Assistant</h1>
+          <h1 className="text-lg font-semibold text-gray-800">
+            Campaign Assistant
+          </h1>
         </div>
         <div className="text-sm text-gray-500">
-          {connectedSources.length} data source{connectedSources.length !== 1 ? 's' : ''} connected
+          {connectedSources.length} data source
+          {connectedSources.length !== 1 ? 's' : ''} connected
         </div>
       </div>
 
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
+        {messages.map(message => (
           <MessageBubble key={message.id} message={message} />
         ))}
         <div ref={messagesEndRef} />
@@ -126,12 +134,12 @@ const ChatContainer: React.FC<ChatContainerProps> = ({ connectedSources }) => {
           <div className="flex-1">
             <textarea
               value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
+              onChange={e => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder={
                 connectedSources.length > 0
-                  ? "Type your campaign request here..."
-                  : "Connect data sources first, then describe your campaign needs..."
+                  ? 'Type your campaign request here...'
+                  : 'Connect data sources first, then describe your campaign needs...'
               }
               className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={2}

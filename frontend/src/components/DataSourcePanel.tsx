@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Database,
   CheckCircle,
@@ -10,6 +9,8 @@ import {
   ShoppingCart,
   Share2,
 } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { DataSourcePanelProps, DataSource } from '../types';
 
 const DataSourcePanel: React.FC<DataSourcePanelProps> = ({
@@ -92,7 +93,7 @@ const DataSourcePanel: React.FC<DataSourcePanelProps> = ({
 
       {/* Data Sources List */}
       <div className="flex-1 p-4 space-y-4 overflow-y-auto">
-        {sources.map((source) => (
+        {sources.map(source => (
           <div
             key={source.id}
             className={`border rounded-lg p-4 transition-all duration-200 ${getStatusColor(
@@ -120,7 +121,9 @@ const DataSourcePanel: React.FC<DataSourcePanelProps> = ({
               <div className="mb-3 p-2 bg-white rounded border">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Data Points:</span>
-                  <span className="font-medium">{source.dataPoints?.toLocaleString()}</span>
+                  <span className="font-medium">
+                    {source.dataPoints?.toLocaleString()}
+                  </span>
                 </div>
                 {source.lastUpdated && (
                   <div className="flex justify-between text-sm mt-1">
@@ -149,10 +152,14 @@ const DataSourcePanel: React.FC<DataSourcePanelProps> = ({
               ) : (
                 <button
                   onClick={() => handleConnect(source.id)}
-                  disabled={connectingSource === source.id || source.status === 'connecting'}
+                  disabled={
+                    connectingSource === source.id ||
+                    source.status === 'connecting'
+                  }
                   className="flex-1 flex items-center justify-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm"
                 >
-                  {connectingSource === source.id || source.status === 'connecting' ? (
+                  {connectingSource === source.id ||
+                  source.status === 'connecting' ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
                       <span>Connecting...</span>
@@ -169,9 +176,12 @@ const DataSourcePanel: React.FC<DataSourcePanelProps> = ({
 
             {/* Source Description */}
             <div className="mt-3 text-xs text-gray-600">
-              {source.id === 'google_ads' && 'Campaign performance, audience insights, and conversion data'}
-              {source.id === 'shopify' && 'Customer behavior, sales patterns, and inventory data'}
-              {source.id === 'facebook_page' && 'Social engagement, audience demographics, and content performance'}
+              {source.id === 'google_ads' &&
+                'Campaign performance, audience insights, and conversion data'}
+              {source.id === 'shopify' &&
+                'Customer behavior, sales patterns, and inventory data'}
+              {source.id === 'facebook_page' &&
+                'Social engagement, audience demographics, and content performance'}
             </div>
           </div>
         ))}
@@ -183,7 +193,8 @@ const DataSourcePanel: React.FC<DataSourcePanelProps> = ({
           <div className="flex items-center justify-between mb-2">
             <span>Connected Sources:</span>
             <span className="font-medium">
-              {sources.filter(s => s.status === 'connected').length} of {sources.length}
+              {sources.filter(s => s.status === 'connected').length} of{' '}
+              {sources.length}
             </span>
           </div>
           <div className="text-gray-500">

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import { AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+
 import ChatContainer from './components/ChatContainer';
 import DataSourcePanel from './components/DataSourcePanel';
 import ApiService from './services/api';
@@ -52,9 +53,7 @@ function App() {
       // Update status to connecting
       setDataSources(prev =>
         prev.map(source =>
-          source.id === sourceId
-            ? { ...source, status: 'connecting' }
-            : source
+          source.id === sourceId ? { ...source, status: 'connecting' } : source
         )
       );
 
@@ -75,14 +74,11 @@ function App() {
           )
         );
       }, 2000);
-
     } catch (error) {
       console.error(`Failed to connect to ${sourceId}:`, error);
       setDataSources(prev =>
         prev.map(source =>
-          source.id === sourceId
-            ? { ...source, status: 'error' }
-            : source
+          source.id === sourceId ? { ...source, status: 'error' } : source
         )
       );
     }
@@ -94,7 +90,12 @@ function App() {
       setDataSources(prev =>
         prev.map(source =>
           source.id === sourceId
-            ? { ...source, status: 'disconnected', lastUpdated: undefined, dataPoints: undefined }
+            ? {
+                ...source,
+                status: 'disconnected',
+                lastUpdated: undefined,
+                dataPoints: undefined,
+              }
             : source
         )
       );
@@ -104,7 +105,12 @@ function App() {
       setDataSources(prev =>
         prev.map(source =>
           source.id === sourceId
-            ? { ...source, status: 'disconnected', lastUpdated: undefined, dataPoints: undefined }
+            ? {
+                ...source,
+                status: 'disconnected',
+                lastUpdated: undefined,
+                dataPoints: undefined,
+              }
             : source
         )
       );

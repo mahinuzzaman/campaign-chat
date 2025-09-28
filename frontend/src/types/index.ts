@@ -116,4 +116,3 @@ export interface DataSourcePanelProps {
 export interface CampaignDisplayProps {
   campaign: Campaign;
 }
-

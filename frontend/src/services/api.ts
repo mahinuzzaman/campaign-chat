@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+
 import {
   ChatRequest,
   ChatResponse,
@@ -20,11 +21,11 @@ const apiClient = axios.create({
 
 // Request interceptor for logging
 apiClient.interceptors.request.use(
-  (config) => {
+  config => {
     console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
-  (error) => {
+  error => {
     console.error('API Request Error:', error);
     return Promise.reject(error);
   }
@@ -32,11 +33,11 @@ apiClient.interceptors.request.use(
 
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
-  (response) => {
+  response => {
     console.log(`API Response: ${response.status} ${response.config.url}`);
     return response;
   },
-  (error) => {
+  error => {
     console.error('API Response Error:', error.response?.data || error.message);
     return Promise.reject(error);
   }
@@ -61,9 +62,8 @@ export class ApiService {
   // Data source endpoints
   static async getDataSources(): Promise<DataSourcesResponse> {
     try {
-      const response: AxiosResponse<DataSourcesResponse> = await apiClient.get(
-        '/api/data-sources'
-      );
+      const response: AxiosResponse<DataSourcesResponse> =
+        await apiClient.get('/api/data-sources');
       return response.data;
     } catch (error) {
       console.error('Error fetching data sources:', error);
@@ -87,7 +87,9 @@ export class ApiService {
     }
   }
 
-  static async disconnectDataSource(sourceId: string): Promise<ConnectResponse> {
+  static async disconnectDataSource(
+    sourceId: string
+  ): Promise<ConnectResponse> {
     try {
       const response: AxiosResponse<ConnectResponse> = await apiClient.delete(
         `/api/data-sources/${sourceId}/disconnect`
@@ -98,7 +100,6 @@ export class ApiService {
       throw new Error(`Failed to disconnect from ${sourceId}.`);
     }
   }
-
 }
 
 export default ApiService;

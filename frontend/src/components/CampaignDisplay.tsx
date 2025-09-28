@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   ChevronDown,
   ChevronRight,
@@ -8,8 +7,10 @@ import {
   Calendar,
   Users,
   MessageSquare,
-  TrendingUp
+  TrendingUp,
 } from 'lucide-react';
+import React, { useState } from 'react';
+
 import { CampaignDisplayProps } from '../types';
 
 const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
@@ -18,7 +19,9 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
 
   const handleCopyJSON = async () => {
     try {
-      await navigator.clipboard.writeText(JSON.stringify(campaign.jsonPayload, null, 2));
+      await navigator.clipboard.writeText(
+        JSON.stringify(campaign.jsonPayload, null, 2)
+      );
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -45,14 +48,19 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
             <Target className="w-5 h-5 text-blue-600" />
             <div>
               <h3 className="font-semibold text-gray-800">
-                {campaign.jsonPayload.objective.replace(/_/g, ' ').toUpperCase()} Campaign
+                {campaign.jsonPayload.objective
+                  .replace(/_/g, ' ')
+                  .toUpperCase()}{' '}
+                Campaign
               </h3>
               <p className="text-sm text-gray-600">
                 Generated: {formatTimestamp(campaign.createdAt)}
               </p>
             </div>
           </div>
-          <div className={`px-3 py-1 rounded-full text-sm font-medium ${getConfidenceColor(campaign.confidence)}`}>
+          <div
+            className={`px-3 py-1 rounded-full text-sm font-medium ${getConfidenceColor(campaign.confidence)}`}
+          >
             {Math.round(campaign.confidence * 100)}% Confidence
           </div>
         </div>
@@ -66,7 +74,9 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
             <Users className="w-4 h-4 text-gray-500" />
             <div>
               <p className="text-xs text-gray-500">Audience Size</p>
-              <p className="font-semibold">{campaign.jsonPayload.audience.size.toLocaleString()}</p>
+              <p className="font-semibold">
+                {campaign.jsonPayload.audience.size.toLocaleString()}
+              </p>
             </div>
           </div>
 
@@ -75,7 +85,9 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
             <MessageSquare className="w-4 h-4 text-gray-500" />
             <div>
               <p className="text-xs text-gray-500">Primary Channel</p>
-              <p className="font-semibold capitalize">{campaign.jsonPayload.channels.primary}</p>
+              <p className="font-semibold capitalize">
+                {campaign.jsonPayload.channels.primary}
+              </p>
             </div>
           </div>
 
@@ -85,7 +97,9 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
             <div>
               <p className="text-xs text-gray-500">Send Time</p>
               <p className="font-semibold">
-                {new Date(campaign.jsonPayload.timing.send_time).toLocaleTimeString([], {
+                {new Date(
+                  campaign.jsonPayload.timing.send_time
+                ).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
                 })}
@@ -99,7 +113,10 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
             <div>
               <p className="text-xs text-gray-500">Est. Conversions</p>
               <p className="font-semibold">
-                {Math.round(campaign.jsonPayload.performance_estimate.reach * campaign.jsonPayload.performance_estimate.conversion_rate)}
+                {Math.round(
+                  campaign.jsonPayload.performance_estimate.reach *
+                    campaign.jsonPayload.performance_estimate.conversion_rate
+                )}
               </p>
             </div>
           </div>
@@ -107,27 +124,37 @@ const CampaignDisplay: React.FC<CampaignDisplayProps> = ({ campaign }) => {
 
         {/* Quick Campaign Preview */}
         <div className="bg-gray-50 rounded-lg p-3 mb-4">
-          <h4 className="font-medium text-gray-800 mb-2">Campaign Message Preview</h4>
-          {Object.entries(campaign.jsonPayload.message).map(([channel, content]) => (
-            <div key={channel} className="mb-2 last:mb-0">
-              <span className="text-sm font-medium text-gray-600 capitalize">{channel}:</span>
-              <div className="mt-1 p-2 bg-white rounded border text-sm">
-                {typeof content === 'object' && content !== null ? (
-                  <div>
-                    {(content as any).subject && (
-                      <div className="font-medium mb-1">Subject: {(content as any).subject}</div>
-                    )}
-                    <div>{(content as any).content}</div>
-                    {(content as any).cta && (
-                      <div className="mt-1 text-blue-600 font-medium">[{(content as any).cta}]</div>
-                    )}
-                  </div>
-                ) : (
-                  <div>{String(content)}</div>
-                )}
+          <h4 className="font-medium text-gray-800 mb-2">
+            Campaign Message Preview
+          </h4>
+          {Object.entries(campaign.jsonPayload.message).map(
+            ([channel, content]) => (
+              <div key={channel} className="mb-2 last:mb-0">
+                <span className="text-sm font-medium text-gray-600 capitalize">
+                  {channel}:
+                </span>
+                <div className="mt-1 p-2 bg-white rounded border text-sm">
+                  {typeof content === 'object' && content !== null ? (
+                    <div>
+                      {(content as any).subject && (
+                        <div className="font-medium mb-1">
+                          Subject: {(content as any).subject}
+                        </div>
+                      )}
+                      <div>{(content as any).content}</div>
+                      {(content as any).cta && (
+                        <div className="mt-1 text-blue-600 font-medium">
+                          [{(content as any).cta}]
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div>{String(content)}</div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
 
         {/* Expand/Collapse Button */}
