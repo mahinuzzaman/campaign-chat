@@ -1,19 +1,25 @@
+import asyncio
+import random
+from datetime import datetime
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Optional, Dict, Any
-import asyncio
-import uuid
-from datetime import datetime, timezone
-import random
+
+from models.api_models import (
+    ChatRequest,
+    ChatResponse,
+    ConnectRequest,
+    ConnectResponse,
+    DataSourcesResponse,
+)
 
 # Import our services
 from services.campaign_generator import CampaignGenerator
-from models.api_models import ChatRequest, ChatResponse, ConnectRequest, ConnectResponse, DataSourcesResponse
 
 app = FastAPI(
     title="Campaign Chat API",
     description="API for the Campaign Chat Demo",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # CORS middleware
@@ -32,22 +38,22 @@ data_sources_state = {
         "name": "Google Ads",
         "status": "disconnected",
         "lastUpdated": None,
-        "dataPoints": None
+        "dataPoints": None,
     },
     "shopify": {
         "id": "shopify",
         "name": "Shopify",
         "status": "disconnected",
         "lastUpdated": None,
-        "dataPoints": None
+        "dataPoints": None,
     },
     "facebook_page": {
         "id": "facebook_page",
         "name": "Facebook Page",
         "status": "disconnected",
         "lastUpdated": None,
-        "dataPoints": None
-    }
+        "dataPoints": None,
+    },
 }
 
 
@@ -57,6 +63,7 @@ async def get_data_sources():
     """Get all available data sources and their connection status"""
     sources = list(data_sources_state.values())
     return DataSourcesResponse(sources=sources)
+
 
 @app.post("/api/data-sources/{source_id}/connect", response_model=ConnectResponse)
 async def connect_data_source(source_id: str, request: ConnectRequest):
@@ -73,8 +80,9 @@ async def connect_data_source(source_id: str, request: ConnectRequest):
     return ConnectResponse(
         status="connecting",
         estimated_time=2000,
-        message=f"Connecting to {data_sources_state[source_id]['name']}..."
+        message=f"Connecting to {data_sources_state[source_id]['name']}...",
     )
+
 
 @app.delete("/api/data-sources/{source_id}/disconnect", response_model=ConnectResponse)
 async def disconnect_data_source(source_id: str):
@@ -88,8 +96,9 @@ async def disconnect_data_source(source_id: str):
 
     return ConnectResponse(
         status="disconnected",
-        message=f"Disconnected from {data_sources_state[source_id]['name']}"
+        message=f"Disconnected from {data_sources_state[source_id]['name']}",
     )
+
 
 # Chat endpoints
 @app.post("/api/chat/message", response_model=ChatResponse)
@@ -103,7 +112,7 @@ async def send_message(request: ChatRequest):
         return ChatResponse(
             response="Please connect at least one data source to generate campaign recommendations.",
             campaigns=[],
-            processing_time=100
+            processing_time=100,
         )
 
     # Simulate processing delay
@@ -112,31 +121,32 @@ async def send_message(request: ChatRequest):
     # Generate campaign using our service
     campaign_generator = CampaignGenerator()
     campaign = campaign_generator.generate_campaign(
-        message=request.message,
-        connected_sources=connected_sources
+        message=request.message, connected_sources=connected_sources
     )
 
     # Generate response text
     response_text = campaign_generator.generate_response_text(
-        campaign=campaign,
-        user_message=request.message
+        campaign=campaign, user_message=request.message
     )
 
     processing_time = int((datetime.now() - start_time).total_seconds() * 1000)
 
     return ChatResponse(
         response=response_text,
-        campaigns=[{
-            "id": campaign["campaign_id"],
-            "type": campaign["objective"],
-            "confidence": campaign["confidence_score"],
-            "jsonPayload": campaign,
-            "createdAt": campaign["timestamp"]
-        }],
-        processing_time=processing_time
+        campaigns=[
+            {
+                "id": campaign["campaign_id"],
+                "type": campaign["objective"],
+                "confidence": campaign["confidence_score"],
+                "jsonPayload": campaign,
+                "createdAt": campaign["timestamp"],
+            }
+        ],
+        processing_time=processing_time,
     )
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
