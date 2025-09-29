@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
+import { config } from '../config';
 import {
   ChatRequest,
   ChatResponse,
@@ -9,7 +10,7 @@ import {
 } from '../types';
 
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = config.apiUrl;
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -19,14 +20,20 @@ const apiClient = axios.create({
   },
 });
 
-// Request interceptor for logging
+// Request interceptor for logging (only in development)
 apiClient.interceptors.request.use(
-  config => {
-    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
-    return config;
+  requestConfig => {
+    if (config.isDevelopment) {
+      console.log(
+        `API Request: ${requestConfig.method?.toUpperCase()} ${requestConfig.url}`
+      );
+    }
+    return requestConfig;
   },
   error => {
-    console.error('API Request Error:', error);
+    if (config.isDevelopment) {
+      console.error('API Request Error:', error);
+    }
     return Promise.reject(error);
   }
 );
@@ -34,11 +41,18 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   response => {
-    console.log(`API Response: ${response.status} ${response.config.url}`);
+    if (config.isDevelopment) {
+      console.log(`API Response: ${response.status} ${response.config.url}`);
+    }
     return response;
   },
   error => {
-    console.error('API Response Error:', error.response?.data || error.message);
+    if (config.isDevelopment) {
+      console.error(
+        'API Response Error:',
+        error.response?.data || error.message
+      );
+    }
     return Promise.reject(error);
   }
 );
