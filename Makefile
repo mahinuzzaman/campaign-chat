@@ -1,12 +1,12 @@
 # Docker commands
 build:
-	docker-compose build
+	docker compose build
 
 start-campaign-chat:
-	docker-compose up -d
+	docker compose up -d
 
 stop-campaign-chat:
-	docker-compose down
+	docker compose down
 
 # Frontend code quality
 frontend-lint:
